@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="display-5 fw-bold">
+Track Your Placement Journey
+</h1>
+
+<p class="text-secondary mb-5">
+Track applications and interview stages in one place.
+</p>
+
+<div class="row g-4 mb-5">
+
+<div class="col-lg-3 col-md-6">
+<div class="card stats-card">
+<h6>Applied</h6>
+<h1>{{applied_count}}</h1>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="card stats-card">
+<h6>Interview</h6>
+<h1>{{interview_count}}</h1>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="card stats-card">
+<h6>Selected</h6>
+<h1>{{selected_count}}</h1>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="card stats-card">
+<h6>Rejected</h6>
+<h1>{{rejected_count}}</h1>
+</div>
+</div>
+
+</div>
+
+
+<div class="card p-5 mb-5">
+
+<h2>Add Application</h2>
+
+<form method="POST">
+
+<input class="form-control mb-3"
+name="company_name"
+placeholder="Company Name"
+required>
+
+<select class="form-select mb-3" name="status">
+
+<option>Applied</option>
+<option>Interview</option>
+<option>Selected</option>
+<option>Rejected</option>
+
+</select>
+
+<select class="form-select mb-3" name="stage">
+
+<option>Resume Screening</option>
+<option>OA</option>
+<option>Round 1</option>
+<option>Round 2</option>
+<option>HR</option>
+<option>Offer</option>
+
+</select>
+
+<textarea
+class="form-control mb-4"
+rows="3"
+name="notes"
+placeholder="Notes">
+</textarea>
+
+<button class="btn btn-primary w-100">
+
+Add Company
+
+</button>
+
+</form>
+
+</div>
+
+
+<h2 class="mb-4">
+
+Applications
+
+</h2>
+
+<div class="row">
+
+{% for item in applications %}
+
+<div class="col-lg-4 col-md-6 mb-4">
+
+<div class="card application-card">
+
+<h3>
+
+{{item.company_name}}
+
+</h3>
+
+<p>
+
+Stage :
+<strong>{{item.stage}}</strong>
+
+</p>
+
+<p>
+
+{{item.notes}}
+
+</p>
+
+{% if item.status=="Applied" %}
+<span class="badge bg-secondary">Applied</span>
+
+{% elif item.status=="Interview" %}
+<span class="badge bg-warning">Interview</span>
+
+{% elif item.status=="Selected" %}
+<span class="badge bg-success">Selected</span>
+
+{% else %}
+<span class="badge bg-danger">Rejected</span>
+{% endif %}
+
+<hr>
+
+<div class="d-flex justify-content-between">
+
+<a href="/edit/{{item.id}}"
+class="btn btn-warning">
+
+Edit
+
+</a>
+
+<a href="/delete/{{item.id}}"
+class="btn btn-danger">
+
+Delete
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+body{
+    
+    background:#f3f4f6;
+    color:#1d1d1f;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+.navbar{
+    background:#111827 ;
+    border-bottom:1px solid #e5e7eb;
+}
+.navbar-brand{
+    color:rgb(255, 255, 255);
+}
+
+.card{
+    background:white;
+    border:none;
+    border-radius:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.stats-card{
+    text-align:center;
+    padding:30px;
+}
+
+.stats-card h1{
+    font-size:3rem;
+    font-weight:700;
+}
+
+.application-card{
+    background:white;
+    border-radius:30px;
+    padding:30px;
+    transition:.3s;
+}
+
+.application-card:hover{
+    transform:translateY(-5px);
+}
+
+.form-control,
+.form-select{
+    background:#f3f4f6;
+    border:none;
+    border-radius:20px!important;
+    padding:15px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    box-shadow:none;
+}
+
+.btn{
+    border:none;
+    border-radius:18px!important;
+}
+
+.btn-primary{
+    background:#0071e3;
+}
+
+.badge{
+    border-radius:20px;
+    padding:10px 15px;
+}

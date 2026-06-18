@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-lg-8">
+
+<div class="card shadow p-5">
+
+<h2 class="mb-4">
+
+Edit Application
+
+</h2>
+
+<h5 class="text-secondary mb-4">
+
+{{ application.company_name }}
+
+</h5>
+
+<form method="POST">
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Status
+
+</label>
+
+<select class="form-select"
+name="status">
+
+<option>Applied</option>
+<option>Interview</option>
+<option>Selected</option>
+<option>Rejected</option>
+
+</select>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Stage
+
+</label>
+
+<select class="form-select"
+name="stage">
+
+<option>Resume Screening</option>
+<option>OA</option>
+<option>Round 1</option>
+<option>Round 2</option>
+<option>HR</option>
+<option>Offer</option>
+
+</select>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Notes
+
+</label>
+
+<textarea
+class="form-control"
+rows="4"
+name="notes">{{application.notes}}</textarea>
+
+</div>
+
+<button class="btn btn-primary w-100">
+
+Save Changes
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
