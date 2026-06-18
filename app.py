@@ -25,12 +25,9 @@ class Application(db.Model):
     status = db.Column(db.String(50), nullable=False)
     stage = db.Column(db.String(50), nullable=False)
     notes = db.Column(db.String(300),nullable=True)
-with app.app_context():
-    print("DATABASE URL =", database_url)
-    print("Creating tables...")
-    db.drop_all()
+@app.before_request
+def create_tables():
     db.create_all()
-    print("Tables created!")
     
 @app.route('/' , methods=["GET","POST"])
 def home():
