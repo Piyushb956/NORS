@@ -18,6 +18,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+with app.app_context():
+    db.create_all()
 
 class Application(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -108,7 +110,4 @@ def edit(edt_id):
    
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
-    app.run(debug=True)
+    app.run()
