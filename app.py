@@ -18,8 +18,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-with app.app_context():
-    db.create_all()
 
 class Application(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +26,8 @@ class Application(db.Model):
     stage = db.Column(db.String(50), nullable=False)
     notes = db.Column(db.String(300),nullable=True)
 
-
+with app.app_context():
+    db.create_all()
     
 @app.route('/' , methods=["GET","POST"])
 def home():
