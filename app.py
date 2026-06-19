@@ -10,9 +10,10 @@ app = Flask(__name__)
 
 
 database_url = os.getenv("DATABASE_URL")
+print(database_url)
 
-if database_url and database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
+# if database_url and database_url.startswith("postgresql://"):
+    # database_url = database_url.replace("postgresql://", "postgresql://", 1)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
