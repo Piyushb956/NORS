@@ -2,168 +2,458 @@
 
 {% block content %}
 
-<h1 class="display-5 fw-bold">
-Track Your Placement Journey
-</h1>
+<!-- HERO  -->
 
-<p class="text-secondary mb-5">
-Track applications and interview stages in one place.
-</p>
+<section id="dashboard" class="hero section">
 
-<div class="row g-4 mb-5">
+    <div class="surface hero-content">
 
-<div class="col-lg-3 col-md-6">
-<div class="card stats-card">
-<h6>Applied</h6>
-<h1>{{applied_count}}</h1>
-</div>
-</div>
+        <div class="hero-text">
 
-<div class="col-lg-3 col-md-6">
-<div class="card stats-card">
-<h6>Interview</h6>
-<h1>{{interview_count}}</h1>
-</div>
-</div>
+            <span class="hero-badge">
 
-<div class="col-lg-3 col-md-6">
-<div class="card stats-card">
-<h6>Selected</h6>
-<h1>{{selected_count}}</h1>
-</div>
-</div>
+                ✦ Welcome Back
 
-<div class="col-lg-3 col-md-6">
-<div class="card stats-card">
-<h6>Rejected</h6>
-<h1>{{rejected_count}}</h1>
-</div>
-</div>
+            </span>
 
-</div>
+            <h1 class="hero-title">
 
+                Your career journey,<br>
+                <span>beautifully organized.</span>
 
-<div class="card p-5 mb-5">
+            </h1>
 
-<h2>Add Application</h2>
+            <p class="hero-subtitle">
 
-<form method="POST">
+                Discover jobs matching your skills,
+                track every application automatically,
+                and stay focused on getting hired.
 
-<input class="form-control mb-3"
-name="company_name"
-placeholder="Company Name"
-required>
+            </p>
 
-<select class="form-select mb-3" name="status">
+            <div class="hero-actions">
 
-<option>Applied</option>
-<option>Interview</option>
-<option>Selected</option>
-<option>Rejected</option>
+                <button type="button" class="btn-primary">
 
-</select>
+                    <a href="{{ url_for('recommendations') }}" class="btn-primary">
+                        <i class="bi bi-search"></i>
 
-<select class="form-select mb-3" name="stage">
+                        Recommended Jobs
+                    </a>
 
-<option>Resume Screening</option>
-<option>OA</option>
-<option>Round 1</option>
-<option>Round 2</option>
-<option>HR</option>
-<option>Offer</option>
+                </button>
 
-</select>
+                <button type="button" class="btn-outline-light">
 
-<textarea
-class="form-control mb-4"
-rows="3"
-name="notes"
-placeholder="Notes">
-</textarea>
+                    <a href="{{ url_for('profile') }}" class="btn-outline-light">
+                        <i class="bi bi-person"></i>
 
-<button class="btn btn-primary w-100">
+                        Update Skills
+                    </a>
 
-Add Company
+                </button>
 
-</button>
+            </div>
 
-</form>
+        </div>
 
-</div>
+        <div class="hero-image">
+
+            <img src="{{ url_for('static', filename='image/dashboard_background.png') }}" alt="Career Goal">
+
+        </div>
+
+    </div>
+
+</section>
 
 
-<h2 class="mb-4">
+<!--  STATS -->
 
-Applications
+<section class="stats-grid section">
 
-</h2>
+    <article class="surface hover-lift stats-card">
 
-<div class="row">
+        <div class="stats-icon status-applied">
 
-{% for item in applications %}
+            <i class="bi bi-send-fill"></i>
 
-<div class="col-lg-4 col-md-6 mb-4">
+        </div>
 
-<div class="card application-card">
+        <div class="stats-content">
 
-<h3>
+            <h2>{{ applied_count }}</h2>
 
-{{item.company_name}}
+            <h4>Applications</h4>
 
-</h3>
+            <small>Total tracked</small>
 
-<p>
+        </div>
 
-Stage :
-<strong>{{item.stage}}</strong>
+    </article>
 
-</p>
+    <article class="surface hover-lift stats-card">
 
-<p>
+        <div class="stats-icon status-interview">
 
-{{item.notes}}
+            <i class="bi bi-chat-left-text-fill"></i>
 
-</p>
+        </div>
 
-{% if item.status=="Applied" %}
-<span class="badge bg-secondary">Applied</span>
+        <div class="stats-content">
 
-{% elif item.status=="Interview" %}
-<span class="badge bg-warning">Interview</span>
+            <h2>{{ interview_count }}</h2>
 
-{% elif item.status=="Selected" %}
-<span class="badge bg-success">Selected</span>
+            <h4>Interviews</h4>
+            <small>Total tracked</small>
 
-{% else %}
-<span class="badge bg-danger">Rejected</span>
-{% endif %}
+        </div>
 
-<hr>
+    </article>
 
-<div class="d-flex justify-content-between">
+    <article class="surface hover-lift stats-card">
 
-<a href="/edit/{{item.id}}"
-class="btn btn-warning">
+        <div class="stats-icon status-selected">
 
-Edit
+            <i class="bi bi-check-circle-fill"></i>
 
-</a>
+        </div>
 
-<a href="/delete/{{item.id}}"
-class="btn btn-danger">
+        <div class="stats-content">
 
-Delete
+            <h2>{{ selected_count }}</h2>
 
-</a>
+            <h4>Selected</h4>
+            <small>Total tracked</small>
 
-</div>
+        </div>
 
-</div>
+    </article>
 
-</div>
+    <article class="surface hover-lift stats-card">
 
-{% endfor %}
+        <div class="stats-icon status-rejected">
 
-</div>
+            <i class="bi bi-x-circle-fill"></i>
+
+        </div>
+
+        <div class="stats-content">
+
+            <h2>{{ rejected_count }}</h2>
+
+            <h4>Rejected</h4>
+            <small>Total tracked</small>
+
+        </div>
+
+    </article>
+   
+
+</section>
+
+
+<!-- ADD APPLICATION -->
+
+<section id="applications" class="applications-section">
+
+    <header class="section-header">
+
+        <div>
+
+            <h2 class="section-title">
+                Your Applications
+            </h2>
+
+            <p class="section-subtitle">
+                Track every application in one place.
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('recommendations') }}" class="btn-primary">
+            Find Jobs
+        </a>
+
+    </header>
+
+    <div class="row">
+
+        {% if applications %}
+
+        {% for application in applications %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <article class="surface application-card">
+
+                <div class="application-header">
+
+                    <h5>
+                        {{ application.job.title }}
+                    </h5>
+
+                    <small>
+                        {{ application.job.company }}
+                    </small>
+
+                </div>
+
+                <div class="application-body">
+
+                    <p>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        {{ application.job.location }}
+
+                    </p>
+
+                    <p>
+
+                        Applied On:
+
+                        {{ application.applied_at.strftime('%d %b %Y') }}
+
+                    </p>
+
+                    {% if application.status == "Applied" %}
+
+                    <span class="badge bg-primary">
+                        Applied
+                    </span>
+
+                    {% elif application.status == "Interview" %}
+
+                    <span class="badge bg-warning">
+                        Interview
+                    </span>
+
+                    {% elif application.status == "Selected" %}
+
+                    <span class="badge bg-success">
+                        Selected
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-danger">
+                        Rejected
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="application-footer">
+
+                    <a href="{{ application.job.apply_url }}" target="_blank" class="btn btn-outline-primary">
+                        View Job
+                    </a>
+
+                    <a href="{{ url_for('edit',
+                                    application_id=application.id) }}" class="btn btn-primary">
+                        Update
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="surface empty-state">
+
+                <i class="bi bi-briefcase" style="font-size:60px;"></i>
+
+                <h3>
+                    No Applications Yet
+                </h3>
+
+                <p>
+                    Start applying from the recommendation page.
+                </p>
+
+                <a href="{{ url_for('recommendations') }}" class="btn-primary">
+                    Browse Jobs
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!--APPLICATIONS  -->
+
+<section id="applications" class="applications section">
+
+    <header class="section-header">
+
+        <div>
+
+            <h2 class="section-title">
+
+                Recent Applications
+
+            </h2>
+
+            <p class="section-subtitle">
+
+                Your latest placement updates.
+
+            </p>
+
+        </div>
+
+    </header>
+
+    <div class="row">
+
+        {% for item in applications %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <article class="surface hover-lift application-card">
+
+                <header class="application-header">
+
+                    <h3 class="application-title">
+
+                        {{ item.company_name }}
+
+                    </h3>
+
+                    {% if item.status=="Applied" %}
+
+                    <span class="status status-applied">
+
+                        Applied
+
+                    </span>
+
+                    {% elif item.status=="Interview" %}
+
+                    <span class="status status-interview">
+
+                        Interview
+
+                    </span>
+
+                    {% elif item.status=="Selected" %}
+
+                    <span class="status status-selected">
+
+                        Selected
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="status status-rejected">
+
+                        Rejected
+
+                    </span>
+
+                    {% endif %}
+
+                </header>
+
+                <div class="application-body">
+
+                    <p class="application-stage">
+
+                        <i class="bi bi-flag-fill"></i>
+
+                        {{ item.stage }}
+
+                    </p>
+
+                    <p class="application-notes">
+
+                        {{ item.notes or "No notes added." }}
+
+                    </p>
+
+                </div>
+
+                <footer class="application-footer">
+
+                    <a href="{{ (url_for('edit', edt_id=item.id)) }}" class="btn-secondary">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        <span>Edit</span>
+
+                    </a>
+
+                    <a href="{{ (url_for('delete', del_id=item.id)) }}" class="btn-danger">
+
+                        <i class="bi bi-trash"></i>
+
+                        <span>Delete</span>
+
+                    </a>
+
+                </footer>
+
+            </article>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="surface empty-state">
+
+                <div class="empty-icon">
+
+
+                    <i class="bi bi-folder2-open"></i>
+
+                </div>
+                <h3 class="empty-title">
+                    No Applications Yet
+                </h3>
+                <p class="empty-description">
+                    Start tracking your placement journey by adding your first application.
+
+                </p>
+
+                <div class="empty-action">
+                    <a href="#application-form" class="btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+
+                        <span>
+
+                            Add First Application
+
+                        </span>
+
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
 
 {% endblock %}

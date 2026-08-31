@@ -1,0 +1,51 @@
+.match-badge{
+
+    display:inline-block;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:6px 12px;
+
+    border-radius:8px;
+
+    font-size:.8rem;
+
+    font-weight:600;
+
+    margin-bottom:12px;
+
+}
+
+.matched-skills{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin:12px 0 20px;
+
+}
+
+.skill-chip{
+
+    display:inline-block;
+
+    padding:6px 12px;
+
+    margin:4px;
+
+    border-radius:20px;
+
+    background:#e8f5e9;
+
+    color:#2e7d32;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}

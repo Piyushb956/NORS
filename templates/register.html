@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block header %}{% endblock %}
+<!-- to remove header and footer -->
+{% block footer %}{% endblock %}
+{% block content %}
+
+<section class="login-page">
+
+    <div class="login-wrapper">
+
+        <!-- ================= LEFT PANEL ================= -->
+
+        <div class="login-left">
+
+            <div class="login-brand">
+
+                <span class="brand-mark">
+
+                    ✦ Nors
+
+                </span>
+
+                <h1 class="login-title">
+
+                    Build your career,
+                    <br>
+                    one application at a time.
+
+                </h1>
+
+                <p class="login-description">
+
+                    Create your account and start organizing every
+                    placement application, interview, and offer
+                    in one beautiful workspace.
+
+                </p>
+
+            </div>
+
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+
+        </div>
+
+        <!-- ================= RIGHT PANEL ================= -->
+
+        <div class="login-right">
+
+            <div class="surface login-card">
+
+                <div class="login-header">
+
+                    <span class="hero-badge">
+
+                        ✦ Create Account
+
+                    </span>
+
+                    <h2 class="section-title">
+
+                        Join Nors
+
+                    </h2>
+
+                    <p class="section-subtitle">
+
+                        Create your account to start tracking
+                        your placement journey.
+
+                    </p>
+
+                </div>
+
+                <form method="POST">
+
+                    <div class="form-group">
+
+                        <label for="username">
+
+                            Username
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-person"></i>
+
+                            </span>
+
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                class="form-control"
+                                placeholder="John Doe"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="email">
+
+                            Email
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-envelope"></i>
+
+                            </span>
+
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="example@email.com"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="password">
+
+                            Password
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-lock"></i>
+
+                            </span>
+
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="••••••••"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-primary w-100">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                        <span>
+
+                            Create Account
+
+                        </span>
+
+                    </button>
+
+                </form>
+
+                <div class="login-footer">
+
+                    <p>
+
+                        Already have an account?
+
+                        <a href="{{ url_for('login') }}">
+
+                            Login
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+
+<section class="login-page">
+
+    <div class="login-wrapper">
+
+        <!-- ================= LEFT PANEL ================= -->
+
+        <div class="login-left">
+
+           <div class="login-brand">
+
+               <!-- <img src="{{ url_for('static', filename='nors/logo.png') }}"
+               class="hero-logo"> -->
+
+               <div class="login-illustration">
+                   <img src="{{ url_for('static',
+                   filename='image/login_temp.png') }}">
+                </div>
+
+               <div class="quote-card">
+                    <i class="bi bi-quote"></i>
+
+                    <p>
+
+                        Discipline today.
+                        Success tomorrow.
+
+                    </p>
+                </div>
+               <span class="brand-mark">
+                   
+                   Nors
+                   
+                </span>
+                
+                <h1 class="login-title">
+                    Track today.
+                    <br>
+                    Achieve tomorrow.
+                </h1>
+                <p class="login-description">
+                     Keep every application,
+                     interview and offer in one place.
+
+                    Stay focused.
+
+                    Stay motivated.
+
+                    Land your dream job.
+        
+                </p>
+    
+            </div>
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+
+        </div>
+
+
+        <div class="login-right">
+
+            <div class="surface login-card">
+
+                <div class="login-header">
+
+                    <h2 class="section-title">
+
+                        Welcome Back
+
+                    </h2>
+
+                    <p class="section-subtitle">
+
+                       Let's continue your placement journey.
+
+                    </p>
+
+                </div>
+
+                <form method="POST">
+
+                    <div class="form-group">
+
+                        <label for="email">
+
+                            Email
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-envelope"></i>
+
+                            </span>
+
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="Enter your email"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="password">
+
+                            Password
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-lock"></i>
+
+                            </span>
+
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Enter your password"
+                                required>
+
+                        </div>
+
+                    </div>
+                    <!-- <div class="text-end mb-4">
+
+                        <a href="#">
+
+                            Forgot password?
+
+                        </a>
+
+                    </div> 
+                    add in future -->
+
+                    <button
+                        type="submit"
+                        class="btn-primary w-100">
+
+                        <i class="bi bi-box-arrow-in-right"></i>
+
+                        <span>
+
+                            Login
+                            <i class="bi bi-arrow-right"></i>
+
+                        </span>
+
+                    </button>
+
+                </form>
+
+                <div class="login-footer">
+                    <p class="text-center">
+
+                        Trusted by students preparing for placements.
+
+                    </p>
+                    <p>
+
+                        Don't have an account?
+
+                        <a href="{{ url_for('register') }}">
+
+                            Create one
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

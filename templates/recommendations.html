@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="mb-4">
+        Recommended Jobs
+    </h1>
+    <h3>Total Recommendations: {{ recommendations|length }}</h3>
+
+    <div class="row">
+
+        {% for item in recommendations %}
+
+        <div class="col-md-6 mb-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5>
+                        {{ item.job.title }}
+                    </h5>
+
+                    <h6 class="text-muted">
+                        {{ item.job.company }}
+                    </h6>
+
+                    <p>
+                        {{ item.job.location }}
+                    </p>
+
+                    <p>
+                        {{ item.job.skills }}
+                    </p>
+
+                    <span class="badge bg-success">
+                        {{ item.score }}% Match
+                    </span>
+                    
+                    <div class="matched-skills">
+                        
+                        {% for skill in item.matched_skills %}
+
+                        <span class="skill-chip">
+                          ✓    {{ skill }}
+                        </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <br><br>
+
+                    <a href="{{ item.job.apply_url }}" target="_blank" class="btn btn-primary">
+
+                        Apply
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

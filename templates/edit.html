@@ -2,95 +2,163 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<section class="edit-page section">
 
-<div class="col-lg-8">
+    <div class="row justify-content-center">
 
-<div class="card shadow p-5">
+        <div class="col-lg-8">
 
-<h2 class="mb-4">
+            <div class="surface application-form">
 
-Edit Application
+                <!-- ================= HEADER ================= -->
 
-</h2>
+                <div class="section-header">
 
-<h5 class="text-secondary mb-4">
+                    <div>
 
-{{ application.company_name }}
+                        <h2 class="section-title">
 
-</h5>
+                            Edit Application
 
-<form method="POST">
+                        </h2>
 
-<div class="mb-4">
+                        <p class="section-subtitle">
 
-<label class="form-label">
+                            Update the progress of your application.
 
-Status
+                        </p>
 
-</label>
+                    </div>
 
-<select class="form-select"
-name="status">
+                </div>
 
-<option>Applied</option>
-<option>Interview</option>
-<option>Selected</option>
-<option>Rejected</option>
+                <!-- ================= COMPANY ================= -->
 
-</select>
+                <div class="application-info">
 
-</div>
+                    <span class="application-label">
 
-<div class="mb-4">
+                        Company
 
-<label class="form-label">
+                    </span>
 
-Stage
+                    <h3 class="application-company">
 
-</label>
+                        {{ application.job.title }}
 
-<select class="form-select"
-name="stage">
+                    </h3>
 
-<option>Resume Screening</option>
-<option>OA</option>
-<option>Round 1</option>
-<option>Round 2</option>
-<option>HR</option>
-<option>Offer</option>
+                </div>
 
-</select>
+                <!-- ================= FORM ================= -->
 
-</div>
+                <form method="POST">
 
-<div class="mb-4">
+                    <div class="form-group">
 
-<label class="form-label">
+                        <label for="status">
 
-Notes
+                            Status
 
-</label>
+                        </label>
 
-<textarea
-class="form-control"
-rows="4"
-name="notes">{{application.notes}}</textarea>
+                        <select
+                            id="status"
+                            name="status"
+                            class="form-select">
 
-</div>
+                            <option {% if application.status == "Applied" %}selected{% endif %}>Applied</option>
 
-<button class="btn btn-primary w-100">
+                            <option {% if application.status == "Interview" %}selected{% endif %}>Interview</option>
 
-Save Changes
+                            <option {% if application.status == "Selected" %}selected{% endif %}>Selected</option>
 
-</button>
+                            <option {% if application.status == "Rejected" %}selected{% endif %}>Rejected</option>
 
-</form>
+                        </select>
 
-</div>
+                    </div>
 
-</div>
+                    <div class="form-group">
 
-</div>
+                        <label for="stage">
+
+                            Stage
+
+                        </label>
+
+                        <select
+                            id="stage"
+                            name="stage"
+                            class="form-select">
+
+                            <option {% if application.stage == "Resume Screening" %}selected{% endif %}>Resume Screening</option>
+
+                            <option {% if application.stage == "OA" %}selected{% endif %}>OA</option>
+
+                            <option {% if application.stage == "Round 1" %}selected{% endif %}>Round 1</option>
+
+                            <option {% if application.stage == "Round 2" %}selected{% endif %}>Round 2</option>
+
+                            <option {% if application.stage == "HR" %}selected{% endif %}>HR</option>
+
+                            <option {% if application.stage == "Offer" %}selected{% endif %}>Offer</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="notes">
+
+                            Notes
+
+                        </label>
+
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="5"
+                            class="form-control"
+                            placeholder="Add useful notes about this application...">{{ application.notes }}</textarea>
+
+                    </div>
+
+                    <div class="form-footer">
+
+                        <a
+                            href="{{ url_for('home') }}"
+                            class="btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn-primary">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            <span>
+
+                                Save Changes
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 {% endblock %}
