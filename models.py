@@ -24,17 +24,17 @@ class CareerProfile(db.Model):
         db.ForeignKey("user.id")
     )
 
-    target_role = db.Column(db.String(100))
+    target_role = db.Column(db.Text)
 
     skills = db.Column(db.Text)
 
-    location = db.Column(db.String(100))
+    location = db.Column(db.Text)
 
-    experience = db.Column(db.String(50))
+    # experience = db.Column(db.String(50))
 
-    work_mode = db.Column(db.String(50))
+    # work_mode = db.Column(db.String(50))
 
-    job_type = db.Column(db.String(50))
+    # job_type = db.Column(db.String(50))
 
     alerts_enabled = db.Column(
         db.Boolean,
