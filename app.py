@@ -39,8 +39,7 @@ mail.init_app(app)
 
 # initialize extension
 db.init_app(app)
-with app.app_context():
-    db.create_all()
+
 
 # load manager
 login_manager = LoginManager()
