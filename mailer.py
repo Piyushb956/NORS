@@ -1,30 +1,50 @@
-from flask_mail import Message
-from app import mail
+from flask_mail import Mail, Message
 
-def send_job_email(user, jobs):
+mail = Mail()
 
-    body = f"""
-Hello {user.username},
 
-Here are jobs matching your profile:
+def send_job_email(user_email, recommendations):
+
+    body = """
+Hi,
+
+We found new jobs matching your profile.
 
 """
 
-    for job in jobs:
+    for item in recommendations:
+
+        job = item["job"]
 
         body += f"""
-{job.title}
-{job.company}
-{job.location}
 
-Apply:
+----------------------------------------
+
+Title: {job.title}
+
+Company: {job.company}
+
+Location: {job.location}
+
+Skills: {job.skills}
+
+Apply Here:
 {job.apply_url}
 
+Match Score: {item['score']}%
+
+----------------------------------------
+"""
+
+    body += """
+
+Best Regards,
+Nors Team
 """
 
     msg = Message(
-        subject="Nors Job Recommendations",
-        recipients=[user.email],
+        subject="New Job Recommendations From Nors",
+        recipients=[user_email],
         body=body
     )
 

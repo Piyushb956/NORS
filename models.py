@@ -57,22 +57,6 @@ class Job(db.Model):
     apply_url = db.Column(db.Text)
     
     
-class SavedJob(db.Model):
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey("user.id")
-    )
-
-    job_id = db.Column(
-        db.Integer,
-        db.ForeignKey("job.id")
-    )
     
     
 class Application(db.Model):
@@ -98,6 +82,25 @@ class Application(db.Model):
     )
 
     applied_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    
+class EmailLog(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id")
+    )
+
+    job_id = db.Column(
+        db.Integer,
+        db.ForeignKey("job.id")
+    )
+
+    sent_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )

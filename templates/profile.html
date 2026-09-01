@@ -1,103 +1,88 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="profile-page">
+    <div class="container py-5">
 
-<div class="container py-5">
+        <div class="profile-card surface">
 
-    <div class="profile-card surface">
+            <div class="profile-header">
 
-        <div class="profile-header">
+                <h2>
+                    Career Profile
+                </h2>
 
-            <h2>
-                Career Profile
-            </h2>
+                <p>
+                    Help Nors find jobs matching your skills.
+                </p>
 
-            <p>
-                Help Nors find jobs matching your skills.
-            </p>
+            </div>
+
+
+            <form method="POST">
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label">
+                            Target Role
+                        </label>
+
+                        <input type="text" name="target_role" class="form-control"
+                            value="{{ profile.target_role if profile else '' }}" placeholder="Backend Developer">
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label">
+                            Location
+                        </label>
+
+                        <input type="text" name="location" class="form-control"
+                            value="{{ profile.location if profile else '' }}" placeholder="Bangalore">
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Skills
+                    </label>
+
+                    <textarea name="skills" rows="5" class="form-control"
+                        placeholder="Python, Flask, SQL, AWS">{{ profile.skills if profile else '' }}</textarea>
+
+                </div>
+
+                <div class="form-check mb-4">
+
+                    <input class="form-check-input" type="checkbox" name="receive_emails" {% if profile and
+                        profile.receive_emails %} checked {% endif %}>
+
+                    <label class="form-check-label">
+
+                        Receive Daily Job Alerts
+
+                    </label>
+
+                </div>
+
+                <button class="btn-primary">
+
+                    Save Profile
+
+                </button>
+
+            </form>
 
         </div>
 
-        <form method="POST">
-
-            <div class="row">
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Target Role
-                    </label>
-
-                    <input
-                        type="text"
-                        name="target_role"
-                        class="form-control"
-                        value="{{ profile.target_role if profile else '' }}"
-                        placeholder="Backend Developer">
-
-                </div>
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Location
-                    </label>
-
-                    <input
-                        type="text"
-                        name="location"
-                        class="form-control"
-                        value="{{ profile.location if profile else '' }}"
-                        placeholder="Bangalore">
-
-                </div>
-
-            </div>
-
-            <div class="mb-4">
-
-                <label class="form-label">
-                    Skills
-                </label>
-
-                <textarea
-                    name="skills"
-                    rows="5"
-                    class="form-control"
-                    placeholder="Python, Flask, SQL, AWS">{{ profile.skills if profile else '' }}</textarea>
-
-            </div>
-
-            <div class="form-check mb-4">
-
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    name="receive_emails"
-                    {% if profile and profile.receive_emails %}
-                    checked
-                    {% endif %}
-                >
-
-                <label class="form-check-label">
-
-                    Receive Daily Job Alerts
-
-                </label>
-
-            </div>
-
-            <button
-                class="btn-primary">
-
-                Save Profile
-
-            </button>
-
-        </form>
-
     </div>
-
 </div>
+
 
 {% endblock %}

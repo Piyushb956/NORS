@@ -6,10 +6,15 @@ from datetime import datetime
 from models import *
 from services.job_scraper import *
 from services.job_matcher import calculate_match
-from flask_mail import Mail
+from mailer import *
+from schedular import start_scheduler
+from recommendation import get_recommendations
+
+from mailer import mail
 import os
 
 load_dotenv()
+
 
 app = Flask(__name__)
 
@@ -21,6 +26,17 @@ app.config["SECRET_KEY"] = "this_is_my_secret_key_123"
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("Username")
+app.config["MAIL_USERNAME"] = os.getenv("Gmail")
+app.config["MAIL_PASSWORD"] =os.getenv("Mailpassword")
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("Username")
+
+mail.init_app(app)
+
 # initialize extension
 db.init_app(app)
 
@@ -28,6 +44,9 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+
+
 
 # user loader
 @login_manager.user_loader
@@ -105,88 +124,37 @@ def login():
 @login_required
 def home():
 
-    applications = Application.query.filter_by(
+    profile = CareerProfile.query.filter_by(
         user_id=current_user.id
-    ).all()
+    ).first()
+    recommendations = get_recommendations(
+        current_user.id
+    )[:6]
+    if not profile:
+        return redirect(url_for("profile"))
 
-    applied_count = 0
-    interview_count = 0
-    selected_count = 0
-    rejected_count = 0
+    recommended_count = 0
 
-    for item in applications:
+    jobs = Job.query.all()
 
-        if item.status == "Applied":
-            applied_count += 1
+    for job in jobs:
 
-        elif item.status == "Interview":
-            interview_count += 1
+        score, matched_skills = calculate_match(
+            profile.skills,
+            job.skills
+        )
 
-        elif item.status == "Selected":
-            selected_count += 1
-
-        elif item.status == "Rejected":
-            rejected_count += 1
-            
-       
+        if score > 0:
+            recommended_count += 1
 
     return render_template(
         "index.html",
-        applications=applications,
-        applied_count=applied_count,
-        interview_count=interview_count,
-        selected_count=selected_count,
-        rejected_count=rejected_count,
-        
+        jobs_count=len(jobs),
+        recommended_count=recommended_count,
+        recommendations=recommendations
     )
 
-# delete route
-@app.route("/delete/<int:application_id>")
-@login_required
-def delete(application_id):
-
-    application = Application.query.get_or_404(
-        application_id
-    )
-
-    if application.user_id != current_user.id:
-        return redirect("/")
-
-    db.session.delete(application)
-    db.session.commit()
-
-    return redirect("/")
-
-# edit route
-@app.route(
-    "/edit/<int:application_id>",
-    methods=["GET", "POST"]
-)
-@login_required
-def edit(application_id):
-
-    application = Application.query.get_or_404(
-        application_id
-    )
-
-    if application.user_id != current_user.id:
-        return redirect("/")
-
-    if request.method == "POST":
-
-        application.status = request.form[
-            "status"
-        ]
-
-        db.session.commit()
-
-        return redirect("/")
-
-    return render_template(
-        "edit.html",
-        application=application
-    )
-    
+  
     
 # logout route 
 @app.route("/logout")
@@ -268,40 +236,13 @@ def fetch_jobs():
 @login_required
 def recommendations():
 
-    profile = CareerProfile.query.filter_by(
-        user_id=current_user.id
-    ).first()
+    
 
-    if not profile:
-        return redirect(url_for("profile"))
-
-    jobs = Job.query.all()
-
-    recommendations = []
-    print("Jobs in DB:", Job.query.count())
-    print("Profile Skills:", profile.skills)
-
-    for job in jobs:
-
-        score, matched_skills = calculate_match(
-            profile.skills,
-            job.skills
-            )
-
-      
-
-        recommendations.append({
-            "job": job,
-            "score": score,
-            "matched_skills": matched_skills
-            })
-
-    recommendations.sort(
-        key=lambda x: x["score"],
-        reverse=True
+    recommendations = get_recommendations(
+        current_user.id
     )
 
-    recommendations = recommendations[:20]
+    
 
     return render_template(
         "recommendations.html",
@@ -313,19 +254,28 @@ def recommendations():
 @login_required
 def apply_job(job_id):
 
-    application = Application(
+    existing = Application.query.filter_by(
         user_id=current_user.id,
         job_id=job_id
-    )
+    ).first()
 
-    db.session.add(application)
-    db.session.commit()
+    if not existing:
 
-    return redirect(url_for("dashboard"))
+        application = Application(
+            user_id=current_user.id,
+            job_id=job_id
+        )
+
+        db.session.add(application)
+        db.session.commit()
+
+    job = Job.query.get_or_404(job_id)
+
+    return redirect(job.apply_url)
 
 
 
 
-
+start_scheduler(app)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

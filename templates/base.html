@@ -53,26 +53,21 @@
                     {% if current_user.is_authenticated %}
 
                     <div class="nav-actions">
-                        <a href="{{ url_for('recommendations') }}" class="nav-link">
 
-                            Jobs
 
-                        </a>
-
-                        <button class="notification-btn">
+                        <!-- <button class="notification-btn">
                             <i class="bi bi-bell"></i>
-                        </button>
+                        </button> -->
 
                         <div class="dropdown">
 
-                            <a href="{{ url_for('profile') }}">
+                            <button class="profile-btn" data-bs-toggle="dropdown">
 
-                                <i class="bi bi-person"></i>
+                                
+                                {{ current_user.username }}
+                                <i class="bi bi-person-circle"></i>
 
-                                Profile
-
-
-                            </a>
+                            </button>
 
                             <ul class="dropdown-menu dropdown-menu-end profile-dropdown">
 
@@ -90,7 +85,7 @@
 
                                 <li>
 
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ url_for('profile') }}">
 
                                         <i class="bi bi-person"></i>
 
@@ -274,11 +269,7 @@
 
                         </div>
 
-                        <div class="footer-bottom">
 
-                            © {{ current_year }} Nors. All rights reserved.
-
-                        </div>
 
                     </div>
 
@@ -286,7 +277,7 @@
 
                 <div class="footer-bottom">
 
-                    © {{ current_year }} Nors · Built for students with ❤️
+                    © {{ current_year }} Nors · Built for you
 
                 </div>
 
@@ -296,11 +287,7 @@
         {% endblock %}
     </div>
 
-    <button id="backToTop">
 
-        <i class="bi bi-arrow-up"></i>
-
-    </button>
 
     <!-- Bootstrap -->
 

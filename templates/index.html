@@ -70,43 +70,20 @@
 
 <!--  STATS -->
 
+<!-- STATS -->
+
 <section class="stats-grid section">
 
     <article class="surface hover-lift stats-card">
 
         <div class="stats-icon status-applied">
-
-            <i class="bi bi-send-fill"></i>
-
+            <i class="bi bi-briefcase-fill"></i>
         </div>
 
         <div class="stats-content">
-
-            <h2>{{ applied_count }}</h2>
-
-            <h4>Applications</h4>
-
-            <small>Total tracked</small>
-
-        </div>
-
-    </article>
-
-    <article class="surface hover-lift stats-card">
-
-        <div class="stats-icon status-interview">
-
-            <i class="bi bi-chat-left-text-fill"></i>
-
-        </div>
-
-        <div class="stats-content">
-
-            <h2>{{ interview_count }}</h2>
-
-            <h4>Interviews</h4>
-            <small>Total tracked</small>
-
+            <h2>{{ jobs_count }}</h2>
+            <h4>Total Jobs</h4>
+            <small>Available on platform</small>
         </div>
 
     </article>
@@ -114,206 +91,113 @@
     <article class="surface hover-lift stats-card">
 
         <div class="stats-icon status-selected">
-
-            <i class="bi bi-check-circle-fill"></i>
-
+            <i class="bi bi-stars"></i>
         </div>
 
         <div class="stats-content">
-
-            <h2>{{ selected_count }}</h2>
-
-            <h4>Selected</h4>
-            <small>Total tracked</small>
-
+            <h2>{{ recommended_count }}</h2>
+            <h4>Recommended</h4>
+            <small>Matching your profile</small>
         </div>
 
     </article>
-
-    <article class="surface hover-lift stats-card">
-
-        <div class="stats-icon status-rejected">
-
-            <i class="bi bi-x-circle-fill"></i>
-
-        </div>
-
-        <div class="stats-content">
-
-            <h2>{{ rejected_count }}</h2>
-
-            <h4>Rejected</h4>
-            <small>Total tracked</small>
-
-        </div>
-
-    </article>
-   
 
 </section>
 
 
-<!-- ADD APPLICATION -->
+<!-- JOB DISCOVERY -->
+<section class="recommended-section,applications-section">
 
-<section id="applications" class="applications-section">
-
-    <header class="section-header">
+    <div class="section-header">
 
         <div>
-
-            <h2 class="section-title">
-                Your Applications
-            </h2>
-
-            <p class="section-subtitle">
-                Track every application in one place.
-            </p>
-
+            <h2>Recommended For You</h2>
+            <p>Top matching jobs based on your profile.</p>
         </div>
 
-        <a href="{{ url_for('recommendations') }}" class="btn-primary">
-            Find Jobs
+        <a href="{{ url_for('recommendations') }}" class="view-all-btn">
+
+            View All
+            <i class="bi bi-arrow-right"></i>
+
         </a>
 
-    </header>
+    </div>
 
     <div class="row">
 
-        {% if applications %}
+        {% for item in recommendations %}
 
-        {% for application in applications %}
+        <div class="col-md-6 mb-4">
 
-        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
 
-            <article class="surface application-card">
-
-                <div class="application-header">
+                <div class="card-body">
 
                     <h5>
-                        {{ application.job.title }}
+                        {{ item.job.title }}
                     </h5>
 
-                    <small>
-                        {{ application.job.company }}
-                    </small>
-
-                </div>
-
-                <div class="application-body">
+                    <h6 class="text-muted">
+                        {{ item.job.company }}
+                    </h6>
 
                     <p>
-
-                        <i class="bi bi-geo-alt"></i>
-
-                        {{ application.job.location }}
-
+                        {{ item.job.location }}
                     </p>
 
                     <p>
-
-                        Applied On:
-
-                        {{ application.applied_at.strftime('%d %b %Y') }}
-
+                        {{ item.job.skills }}
                     </p>
-
-                    {% if application.status == "Applied" %}
-
-                    <span class="badge bg-primary">
-                        Applied
-                    </span>
-
-                    {% elif application.status == "Interview" %}
-
-                    <span class="badge bg-warning">
-                        Interview
-                    </span>
-
-                    {% elif application.status == "Selected" %}
 
                     <span class="badge bg-success">
-                        Selected
+                        {{ item.score }}% Match
                     </span>
 
-                    {% else %}
+                    <div class="matched-skills">
 
-                    <span class="badge bg-danger">
-                        Rejected
-                    </span>
+                        {% for skill in item.matched_skills %}
 
-                    {% endif %}
+                        <span class="skill-chip">
+                            ✓ {{ skill }}
+                        </span>
 
-                </div>
+                        {% endfor %}
 
-                <div class="application-footer">
+                    </div>
 
-                    <a href="{{ application.job.apply_url }}" target="_blank" class="btn btn-outline-primary">
-                        View Job
+                    <br><br>
+
+                    <a href="{{ item.job.apply_url }}" target="_blank" class="btn btn-primary">
+
+                        Apply
+
                     </a>
 
-                    <a href="{{ url_for('edit',
-                                    application_id=application.id) }}" class="btn btn-primary">
-                        Update
-                    </a>
-
                 </div>
-
-            </article>
-
-        </div>
-
-        {% endfor %}
-
-        {% else %}
-
-        <div class="col-12">
-
-            <div class="surface empty-state">
-
-                <i class="bi bi-briefcase" style="font-size:60px;"></i>
-
-                <h3>
-                    No Applications Yet
-                </h3>
-
-                <p>
-                    Start applying from the recommendation page.
-                </p>
-
-                <a href="{{ url_for('recommendations') }}" class="btn-primary">
-                    Browse Jobs
-                </a>
 
             </div>
 
         </div>
 
-        {% endif %}
+        {% endfor %}
 
     </div>
 
 </section>
 
 
-<!--APPLICATIONS  -->
+<!-- HOW IT WORKS -->
 
-<section id="applications" class="applications section">
+<section class="applications-section">
 
     <header class="section-header">
 
         <div>
 
             <h2 class="section-title">
-
-                Recent Applications
-
+                How Nors Works
             </h2>
-
-            <p class="section-subtitle">
-
-                Your latest placement updates.
-
-            </p>
 
         </div>
 
@@ -321,136 +205,139 @@
 
     <div class="row">
 
-        {% for item in applications %}
+        <div class="col-md-4 mb-4">
 
-        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="surface application-card">
 
-            <article class="surface hover-lift application-card">
+                <h4>1. Create Profile</h4>
 
-                <header class="application-header">
-
-                    <h3 class="application-title">
-
-                        {{ item.company_name }}
-
-                    </h3>
-
-                    {% if item.status=="Applied" %}
-
-                    <span class="status status-applied">
-
-                        Applied
-
-                    </span>
-
-                    {% elif item.status=="Interview" %}
-
-                    <span class="status status-interview">
-
-                        Interview
-
-                    </span>
-
-                    {% elif item.status=="Selected" %}
-
-                    <span class="status status-selected">
-
-                        Selected
-
-                    </span>
-
-                    {% else %}
-
-                    <span class="status status-rejected">
-
-                        Rejected
-
-                    </span>
-
-                    {% endif %}
-
-                </header>
-
-                <div class="application-body">
-
-                    <p class="application-stage">
-
-                        <i class="bi bi-flag-fill"></i>
-
-                        {{ item.stage }}
-
-                    </p>
-
-                    <p class="application-notes">
-
-                        {{ item.notes or "No notes added." }}
-
-                    </p>
-
-                </div>
-
-                <footer class="application-footer">
-
-                    <a href="{{ (url_for('edit', edt_id=item.id)) }}" class="btn-secondary">
-
-                        <i class="bi bi-pencil-square"></i>
-
-                        <span>Edit</span>
-
-                    </a>
-
-                    <a href="{{ (url_for('delete', del_id=item.id)) }}" class="btn-danger">
-
-                        <i class="bi bi-trash"></i>
-
-                        <span>Delete</span>
-
-                    </a>
-
-                </footer>
-
-            </article>
-
-        </div>
-
-        {% else %}
-
-        <div class="col-12">
-
-            <div class="surface empty-state">
-
-                <div class="empty-icon">
-
-
-                    <i class="bi bi-folder2-open"></i>
-
-                </div>
-                <h3 class="empty-title">
-                    No Applications Yet
-                </h3>
-                <p class="empty-description">
-                    Start tracking your placement journey by adding your first application.
-
+                <p>
+                    Add your skills, target role and location.
                 </p>
 
-                <div class="empty-action">
-                    <a href="#application-form" class="btn-primary">
-                        <i class="bi bi-plus-circle"></i>
-
-                        <span>
-
-                            Add First Application
-
-                        </span>
-
-                    </a>
-
-                </div>
             </div>
 
         </div>
 
-        {% endfor %}
+        <div class="col-md-4 mb-4">
+
+            <div class="surface application-card">
+
+                <h4>2. We Match Jobs</h4>
+
+                <p>
+                    Nors compares your profile against every job in the database.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="surface application-card">
+
+                <h4>3. Apply Faster</h4>
+
+                <p>
+                    Browse matching jobs and apply directly from one place.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<!-- USER FEEDBACK -->
+
+<section class="section feedback-section">
+
+    <header class="section-header">
+
+        <div>
+            <h2 class="section-title">
+                What Users Say
+            </h2>
+
+            <p class="section-subtitle">
+                Feedback from students and job seekers using Nors.
+            </p>
+        </div>
+
+    </header>
+
+    <div class="row">
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="surface feedback-card">
+
+                <div class="feedback-stars">
+                    ⭐⭐⭐⭐⭐
+                </div>
+
+                <p class="feedback-text">
+                    "Within a week, Nors helped me discover jobs I never found on LinkedIn. The recommendations were
+                    surprisingly accurate."
+                </p>
+
+                <div class="feedback-user">
+                    <strong>Rahul Sharma</strong>
+                    <small>Software Engineer</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="surface feedback-card">
+
+                <div class="feedback-stars">
+                    ⭐⭐⭐⭐⭐
+                </div>
+
+                <p class="feedback-text">
+                    "I was tired of checking multiple job sites every day. Nors saved me hours by bringing relevant jobs
+                    into one place."
+                </p>
+
+                <div class="feedback-user">
+                    <strong>Priya Patel</strong>
+                    <small>Frontend Developer</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="surface feedback-card">
+
+                <div class="feedback-stars">
+                    ⭐⭐⭐⭐⭐
+                </div>
+
+                <p class="feedback-text">
+                    "The profile-based matching is the best feature. It feels like having a personal job assistant."
+                </p>
+
+                <div class="feedback-user">
+                    <strong>Amit Verma</strong>
+                    <small>Data Analyst</small>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
