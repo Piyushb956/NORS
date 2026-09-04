@@ -1,17 +1,24 @@
 from flask import Flask , render_template,request,redirect,flash,url_for
 from flask_login import LoginManager, login_user,current_user,login_required,logout_user
 from werkzeug.security import generate_password_hash,check_password_hash
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 from datetime import datetime
+
 from models import *
 from services.job_scraper import *
 from services.job_matcher import calculate_match
-from mailer import *
-from schedular import start_scheduler
-from recommendation import get_recommendations
+from services.resume_parser import extract_resume_text
+from services.embedding_service import generate_embedding
 
+from mailer import *
+
+from recommendation import get_recommendations
 from mailer import mail
+from cleanup_job import delete_old_jobs
+from job_alert import send_daily_alerts
 import os
+import json
 
 load_dotenv()
 
@@ -205,6 +212,9 @@ def profile():
             request.form.get("receive_emails")
             == "on"
         )
+        
+        upload_resume()
+        
 
         db.session.add(profile)
 
@@ -225,13 +235,7 @@ def profile():
     ) 
     
     
-    
-@app.route("/fetch-jobs")
-def fetch_jobs():
 
-    scrape_jobs()
-
-    return "Jobs Fetched Successfully"
   
 @app.route("/recommendations")
 @login_required
@@ -276,7 +280,71 @@ def apply_job(job_id):
 
 
 
+UPLOAD_FOLDER = "uploads"
 
-start_scheduler(app)
+@app.route("/upload-resume", methods=["POST"])
+@login_required
+def upload_resume():
+
+    file = request.files["resume"]
+
+    path = os.path.join(
+        "uploads",
+        file.filename
+    )
+
+    file.save(path)
+    print("1.file saved")
+
+    text = extract_resume_text(path)
+    print("2. text extract")
+    
+    embedding = generate_embedding(text)
+    print("3.embedding generate")
+
+    embedding_json = json.dumps(
+        embedding.tolist()
+    )
+    print("4.convert into json")
+    print(f"Embedding Size: {len(embedding)}")
+
+    resume = Resume(
+        user_id=current_user.id,
+        file_name=file.filename,
+        file_path=path,
+        extracted_text=text,
+        embedding=embedding_json
+    )
+
+    db.session.add(resume)
+    db.session.commit()
+
+    return redirect(url_for("profile"))
+
+@app.route("/fetch-jobs")
+def fetch_jobs():
+
+    
+
+    scrape_jobs()
+
+    return "Job Added"
+
+@app.route("/cleanup-jobs")
+def cleanup_jobs():
+
+    delete_old_jobs(app = app)
+
+    return "Cleanup Complete"
+
+@app.route("/send-alerts")
+def send_alerts():
+
+    send_daily_alerts()
+
+    return "Emails Sent"
+
+
+
 if __name__ == "__main__":
     app.run()

@@ -1,10 +1,13 @@
 import requests
+import json
 
+from services.embedding_service import generate_embedding
 from models import Job
 from app import db
+from bs4 import BeautifulSoup
 
 
-def get_jobs():
+def scrape_remotive():
 
     url = "https://remoteok.com/api"
 
@@ -50,13 +53,27 @@ def save_jobs(jobs):
 
         if existing:
             continue
+        
+        job_text = f"""
+        {item['title']}
+        {item['company']}
+        {item['skills']}
+        """
+        embedding = generate_embedding(
+            job_text
+        )
 
+        embedding_json = json.dumps(
+            embedding.tolist()
+        )
+        
         new_job = Job(
             company=item["company"],
             title=item["title"],
             location=item["location"],
             skills=item["skills"],
-            apply_url=item["apply_url"]
+            apply_url=item["apply_url"],
+            embedding=embedding_json
         )
 
         db.session.add(new_job)
@@ -70,6 +87,14 @@ def save_jobs(jobs):
 
 def scrape_jobs():
 
-    jobs = get_jobs()
+    all_jobs = []
 
-    save_jobs(jobs)
+    all_jobs.extend(
+        scrape_remotive()
+    )
+
+
+
+   
+
+    save_jobs(all_jobs)

@@ -31,7 +31,7 @@ Skills: {job.skills}
 Apply Here:
 {job.apply_url}
 
-Match Score: {item['score']}%
+Match Score: {"%.2f",item['score']}%
 
 ----------------------------------------
 """

@@ -19,7 +19,7 @@
             </div>
 
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
 
                 <div class="row">
 
@@ -69,6 +69,10 @@
 
                     </label>
 
+                </div>
+                <div class="mb-3">
+                    <label>Resume (PDF)</label>
+                    <input type="file" name="resume" class="form-control" accept=".pdf">
                 </div>
 
                 <button class="btn-primary">

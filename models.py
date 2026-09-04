@@ -56,6 +56,10 @@ class Job(db.Model):
 
     apply_url = db.Column(db.Text)
     
+    embedding = db.Column(db.Text)
+    
+    created_at = db.Column(db.DateTime,default=datetime.utcnow)
+    
     
     
     
@@ -103,4 +107,31 @@ class EmailLog(db.Model):
     sent_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
+    )
+    
+class Resume(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    file_name = db.Column(
+        db.String(255)
+    )
+
+    file_path = db.Column(
+        db.Text
+    )
+
+    extracted_text = db.Column(
+        db.Text
+    )
+    embedding = db.Column(
+        db.Text
     )

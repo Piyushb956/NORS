@@ -36,10 +36,10 @@
                     </p>
 
                     <span class="badge bg-success">
-                        {{ item.score }}% Match
+                       {{ "%.2f"|format(item.score) }}% Match
                     </span>
                     
-                    <div class="matched-skills">
+                    <!-- <div class="matched-skills">
                         
                         {% for skill in item.matched_skills %}
 
@@ -49,7 +49,7 @@
 
                         {% endfor %}
 
-                    </div>
+                    </div> -->
 
                     <br><br>
 
