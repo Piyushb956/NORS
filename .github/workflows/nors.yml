@@ -1,31 +1,17 @@
-name: NORS Scheduler
+name: Send Emails
 
 on:
   schedule:
-
-    - cron: "0 */6 * * *"
-
-  workflow_dispatch:
+    - cron: '0 8 * * *'
 
 jobs:
-
-  run:
-
+  email:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Wake NORS
-
-        run: |
-          curl https://placement-tracker-38tw.onrender.com/fetch-jobs
-
-      - name:Send Mail 
-
+      - name: Send Emails
+      
         run: |
           curl https://placement-tracker-38tw.onrender.com/send-alerts
 
-      - name:Cleanup Jobs
-
-        run: |
-          curl https://placement-tracker-38tw.onrender.com//cleanup-jobs
+      

@@ -1,0 +1,14 @@
+name: Cleanup Jobs
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cleanup
+        run: |
+          curl https://placement-tracker-38tw.onrender.com//cleanup-jobs
