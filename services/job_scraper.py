@@ -10,26 +10,18 @@ from bs4 import BeautifulSoup
 def scrape_remotive():
 
     url = "https://remoteok.com/api"
+    headers = {"User-Agent": "Mozilla/5.0"}
 
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-
-    response = requests.get(
-        url,
-        headers=headers
-    )
+    response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
         print("Failed:", response.status_code)
         return []
 
     data = response.json()
-
     jobs = []
 
     for item in data[1:]:
-
         jobs.append({
             "company": item.get("company", ""),
             "title": item.get("position", ""),
@@ -45,7 +37,7 @@ def save_jobs(jobs):
 
     added = 0
 
-    for item in jobs:
+    for i, item in enumerate(jobs):
 
         existing = Job.query.filter_by(
             apply_url=item["apply_url"]
@@ -53,20 +45,15 @@ def save_jobs(jobs):
 
         if existing:
             continue
-        
+
         job_text = f"""
         {item['title']}
         {item['company']}
         {item['skills']}
         """
-        embedding = generate_embedding(
-            job_text
-        )
+        embedding = generate_embedding(job_text)
+        embedding_json = json.dumps(embedding.tolist())
 
-        embedding_json = json.dumps(
-            embedding.tolist()
-        )
-        
         new_job = Job(
             company=item["company"],
             title=item["title"],
@@ -77,24 +64,19 @@ def save_jobs(jobs):
         )
 
         db.session.add(new_job)
-
         added += 1
 
-    db.session.commit()
+        # commit every 20 jobs instead of holding everything until the end
+        if added % 20 == 0:
+            db.session.commit()
 
+    db.session.commit()  # final commit for any remainder
     print(f"{added} jobs added")
 
 
 def scrape_jobs():
 
     all_jobs = []
-
-    all_jobs.extend(
-        scrape_remotive()
-    )
-
-
-
-   
+    all_jobs.extend(scrape_remotive())
 
     save_jobs(all_jobs)
