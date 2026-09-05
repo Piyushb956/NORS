@@ -281,6 +281,7 @@ def apply_job(job_id):
 
 
 UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route("/upload-resume", methods=["POST"])
 @login_required
@@ -292,7 +293,7 @@ def upload_resume():
         "uploads",
         file.filename
     )
-
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     file.save(path)
     print("1.file saved")
 
