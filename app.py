@@ -137,7 +137,8 @@ def login():
 @app.route("/")
 @login_required
 def home():
-
+    
+    print("nors v2")
     profile = CareerProfile.query.filter_by(
         user_id=current_user.id
     ).first()
