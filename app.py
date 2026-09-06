@@ -9,8 +9,8 @@ from models import *
 from services.job_scraper import *
 from services.job_matcher import calculate_match
 from services.resume_parser import extract_resume_text
-from services.embedding_service import generate_embedding
 
+from schedular import start_scheduler
 from mailer import *
 
 from recommendation import get_recommendations
@@ -28,10 +28,16 @@ app = Flask(__name__)
 # read db url from.env
 database_url = os.getenv("DATABASE_URL")
 
+
 # configiration
 app.config["SECRET_KEY"] = "this_is_my_secret_key_123"
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,   # tests each connection before using it
+    "pool_recycle": 280,     # recycles connections before they go stale
+}
 
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -208,12 +214,13 @@ def profile():
             "location"
         )
 
-        profile.receive_emails = (
+        profile.alerts_enabled= (
             request.form.get("receive_emails")
             == "on"
         )
         
-        upload_resume()
+        if "resume" in request.files:
+            upload_resume()
         
 
         db.session.add(profile)
@@ -300,21 +307,15 @@ def upload_resume():
     text = extract_resume_text(path)
     print("2. text extract")
     
-    embedding = generate_embedding(text)
-    print("3.embedding generate")
+ 
 
-    embedding_json = json.dumps(
-        embedding.tolist()
-    )
-    print("4.convert into json")
-    print(f"Embedding Size: {len(embedding)}")
 
     resume = Resume(
         user_id=current_user.id,
         file_name=file.filename,
         file_path=path,
         extracted_text=text,
-        embedding=embedding_json
+        
     )
 
     db.session.add(resume)
@@ -346,6 +347,6 @@ def send_alerts():
     return "Emails Sent"
 
 
-
+start_scheduler(app) 
 if __name__ == "__main__":
     app.run()

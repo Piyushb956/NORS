@@ -1,24 +1,18 @@
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
+from models import Job, db
 
-from models import Job,db
 
 def delete_old_jobs(app):
 
     with app.app_context():
 
-        cutoff = datetime.utcnow() - timedelta(days=4)
+        cutoff = datetime.utcnow() - timedelta(days=1)
 
-        old_jobs = Job.query.filter(
+        deleted = Job.query.filter(
             Job.created_at < cutoff
-        ).all()
-
-        for job in old_jobs:
-            db.session.delete(job)
+        ).delete()
 
         db.session.commit()
 
-        print(
-            f"Deleted {len(old_jobs)} jobs"
-        )
-        
+        print(f"Deleted {deleted} jobs")

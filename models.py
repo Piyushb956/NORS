@@ -11,7 +11,7 @@ class User(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100),unique= True,nullable=False)
     email = db.Column(db.String(120),unique=True,nullable=False)
-    password = db.Column(db.String(255),unique=True,nullable=False)
+    password = db.Column(db.String(255),nullable=False)
 
 
 
@@ -54,9 +54,9 @@ class Job(db.Model):
 
     skills = db.Column(db.Text)
 
-    apply_url = db.Column(db.Text)
+    apply_url = db.Column(db.Text,unique=True,nullable=False)
     
-    embedding = db.Column(db.Text)
+    
     
     created_at = db.Column(db.DateTime,default=datetime.utcnow)
     
@@ -132,6 +132,4 @@ class Resume(db.Model):
     extracted_text = db.Column(
         db.Text
     )
-    embedding = db.Column(
-        db.Text
-    )
+   

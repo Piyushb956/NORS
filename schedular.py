@@ -2,6 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from services.job_scraper import scrape_jobs
 from job_alert import send_daily_alerts
+from cleanup_job import delete_old_jobs
 
 
 def start_scheduler(app):
@@ -15,6 +16,10 @@ def start_scheduler(app):
     def run_alerts():
         with app.app_context():
             send_daily_alerts()
+            
+    def run_cleanup():
+        with app.app_context():
+            delete_old_jobs(app)
 
     scheduler.add_job(
         run_scraper,
@@ -33,6 +38,13 @@ def start_scheduler(app):
         run_alerts,
         "cron",
         hour=18
+    )
+    
+    scheduler.add_job(
+        run_cleanup,
+        "cron",
+        hour=0,
+        minute=0
     )
 
     scheduler.start()

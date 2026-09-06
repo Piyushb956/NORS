@@ -1,82 +1,102 @@
 import requests
-import json
 
-from services.embedding_service import generate_embedding
-from models import Job
-from app import db
-from bs4 import BeautifulSoup
+from models import Job, db
 
 
-def scrape_remotive():
+def scrape_remoteok():
 
     url = "https://remoteok.com/api"
-    headers = {"User-Agent": "Mozilla/5.0"}
 
-    response = requests.get(url, headers=headers)
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
-    if response.status_code != 200:
-        print("Failed:", response.status_code)
+    try:
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=15
+        )
+
+        response.raise_for_status()
+
+        data = response.json()
+
+    except Exception as e:
+
+        print(f"[RemoteOK] Scraping failed: {e}")
+
         return []
 
-    data = response.json()
     jobs = []
 
     for item in data[1:]:
-        jobs.append({
-            "company": item.get("company", ""),
-            "title": item.get("position", ""),
-            "location": item.get("location", "Remote"),
-            "skills": ",".join(item.get("tags", [])),
-            "apply_url": item.get("url", "")
-        })
+
+        apply_url = item.get("url")
+
+        if not apply_url:
+            continue
+
+        jobs.append(
+            {
+                "company": item.get("company", ""),
+                "title": item.get("position", ""),
+                "location": item.get("location", "Remote"),
+                "skills": ",".join(item.get("tags", [])),
+                "apply_url": apply_url
+            }
+        )
+
+    print(f"[RemoteOK] Fetched {len(jobs)} jobs")
 
     return jobs
 
 
 def save_jobs(jobs):
 
+    if not jobs:
+        print("No jobs to save")
+        return
+
+    existing_urls = {
+        job.apply_url
+        for job in db.session.query(Job.apply_url).all()
+    }
+
     added = 0
 
-    for i, item in enumerate(jobs):
+    for item in jobs:
 
-        existing = Job.query.filter_by(
-            apply_url=item["apply_url"]
-        ).first()
-
-        if existing:
+        if item["apply_url"] in existing_urls:
             continue
-
-        job_text = f"""
-        {item['title']}
-        {item['company']}
-        {item['skills']}
-        """
-        embedding = generate_embedding(job_text)
-        embedding_json = json.dumps(embedding.tolist())
 
         new_job = Job(
             company=item["company"],
             title=item["title"],
             location=item["location"],
             skills=item["skills"],
-            apply_url=item["apply_url"],
-            embedding=embedding_json
+            apply_url=item["apply_url"]
         )
 
         db.session.add(new_job)
+
         added += 1
 
-        # commit every 20 jobs instead of holding everything until the end
         if added % 20 == 0:
             db.session.commit()
 
-    db.session.commit()  # final commit for any remainder
-    print(f"{added} jobs added")
+    db.session.commit()
+
+    print(f"{added} new jobs added")
 
 
 def scrape_jobs():
 
     all_jobs = []
-    all_jobs.extend(scrape_remotive())
+
+    all_jobs.extend(
+        scrape_remoteok()
+    )
 
     save_jobs(all_jobs)

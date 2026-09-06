@@ -5,42 +5,45 @@ mail = Mail()
 
 def send_job_email(user_email, recommendations):
 
-    body = """
-Hi,
+   
 
-We found new jobs matching your profile.
+    body = f"""
+    
+        Hi,
 
-"""
+        We found {len(recommendations)} new jobs matching your profile.
+
+        """
 
     for item in recommendations:
 
         job = item["job"]
 
         body += f"""
+        
 
-----------------------------------------
+         ------------------------------------------
 
-Title: {job.title}
+            Title: {job.title}
 
-Company: {job.company}
+            Company: {job.company}
 
-Location: {job.location}
+            Location: {job.location}
 
-Skills: {job.skills}
+            Skills: {job.skills}
 
-Apply Here:
-{job.apply_url}
+            Apply Here: {job.apply_url}
 
-Match Score: {"%.2f",item['score']}%
+            Match Score: {item['score']:.2f}%
 
-----------------------------------------
-"""
+         ----------------------------------------
+        """
 
     body += """
 
-Best Regards,
-Nors Team
-"""
+        Best Regards,
+        Nors Team
+        """
 
     msg = Message(
         subject="New Job Recommendations From Nors",
